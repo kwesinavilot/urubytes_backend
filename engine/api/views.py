@@ -2,9 +2,7 @@ from django.http import Http404, JsonResponse
 from .models import Waitlist
 from .serializers import WaitlistSerializer
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework import generics, mixins
 
 # Create your views here.
 @api_view(['GET'])
@@ -14,57 +12,31 @@ def index(request):
     })
 
 # list all the waitlisters or create a new one
-class Waitlists(APIView): 
-    # create get all the waitlists
-    def get(self, request, format=None):
-        waitlist = Waitlist.objects.all()
-        waitlistSerializer = WaitlistSerializer(waitlist, many=True)
-        return Response(waitlistSerializer.data)
+class Waitlists(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView): 
+    queryset = Waitlist.objects.all()
+    serializer_class = WaitlistSerializer
+
+    # get all the waitlists
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
     # add someone to waitlist
-    def post(self, request, format=None):
-        waitlistSerializer = WaitlistSerializer(data=request.data)
-
-        if waitlistSerializer.is_valid():
-            waitlistSerializer.save()
-            return Response(waitlistSerializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(waitlistSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
 # Retrieve, update or delete a waitlister
-class Waitlister(APIView):
-    # get specific waitlister
-    def getWaitlister(self, pk):
-        # try to get waitlist
-        try:
-            return Waitlist.objects.get(id=pk)
-        except Waitlist.DoesNotExist:
-            # if not found, return 404
-            raise Http404
+class Waitlister(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Waitlist.objects.all()
+    serializer_class = WaitlistSerializer
     
     # get and return specific waitlister
-    def get(self, request, pk, format=None):
-        waitlister = self.getWaitlister(pk)
-        waitlistSerializer = WaitlistSerializer(waitlister, many=False)
-        return Response(waitlistSerializer.data)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
     # update waitlister
-    def put(self, request, pk, format=None):
-        waitlister = self.getWaitlister(pk)
-        
-        waitlistSerializer = WaitlistSerializer(instance=waitlister, data=request.data)
-
-        # check if data is valid
-        if waitlistSerializer.is_valid():
-            # if valid, save and return the updated data
-            waitlistSerializer.save()
-            return Response(waitlistSerializer.data)
-        
-        # if not valid, return 400
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
     # delete a waitlister
-    def delete(self, request, pk, format=None):
-        waitlister = self.getWaitlister(pk)
-        waitlister.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
