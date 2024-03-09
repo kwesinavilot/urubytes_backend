@@ -8,7 +8,7 @@ class Waitlist(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.email
+        return f"{self.email} - {self.phoneNumber} - {self.created_at}"
     
 class Contact(models.Model):
     email = models.CharField(max_length=60)
@@ -18,4 +18,4 @@ class Contact(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.email
+        return f"{self.email} - {self.phoneNumber} - {self.created_at}"
