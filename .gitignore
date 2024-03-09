@@ -1,3 +1,9 @@
 /virenv
 ./virenv
 ./virenv/*
+
+.env
+/.env
+
+./engine/db.sqlite3
+/engine/db.sqlite3

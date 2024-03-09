@@ -127,8 +127,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST_FRAMEWORK = {
-#     'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
 #     'DEFAULT_PARSER_CLASSES': (
 #         'rest_framework_json_api.parsers.JSONParser',
 #     ),
@@ -148,4 +148,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         'rest_framework_json_api.renderers.JSONRenderer',
 #     ),
 #     'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
-# }
+}
