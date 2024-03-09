@@ -5,3 +5,8 @@ class WaitlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waitlist
         fields = '__all__'
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = '__all__'
