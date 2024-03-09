@@ -12,7 +12,7 @@ class Waitlist(models.Model):
 class Contact(models.Model):
     email = models.CharField(max_length=60)
     phoneNumber = models.CharField(max_length=15)
-    message = models.CharField(max_length=60)
+    message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
