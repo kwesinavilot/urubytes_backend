@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
-from .serializers import RegistrationSerializer
+from .serializers import RegistrationSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # register a new user
 class RegisterView(GenericAPIView):
@@ -25,3 +27,16 @@ class RegisterView(GenericAPIView):
         
         # if not valid, respond with errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class ObtainUserPairSerializer(TokenObtainPairSerializer):
+#     @classmethod
+#     def get_token(cls, user):
+#         token = super().get_token(user)
+
+#         # Add custom claims
+#         # get user's name through serializer
+#         serializer = UserSerializer(user)
+#         # token['email'] = user.email
+#         token['name'] = serializer.data['name']
+#         return token
+#         return token

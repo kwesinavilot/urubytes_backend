@@ -69,13 +69,3 @@ class Insight(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.interests} - {self.referrer} - {self.date_created}"
-
-
-class OneTimePassword(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    otp = models.CharField(max_length=6)
-    date_created = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.user} - {self.otp} - {self.date_created}"
