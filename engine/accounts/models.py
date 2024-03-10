@@ -1,49 +1,46 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from .manager import UserManager
 
 # create the organization model
 class Organization(models.Model):
-    orgID = models.CharField(_('Organization ID'), max_length=15)
-    name = models.CharField(_('Organization Name'), max_length=100)
-    email = models.EmailField(_('Email Address'), unique=True)
-    phoneNumber = models.CharField(_('Phone Number'), max_length=15)
+    orgID = models.CharField(_('Organization ID'), max_length=15, primary_key=True)
+    name = models.CharField(_('Organization Name'), max_length=100, unique=True)
+    email = models.EmailField(_('Email Address'), unique=True, null=True)
+    phoneNumber = models.CharField(_('Phone Number'), max_length=15, null=True, blank=True)
     industry = models.CharField(_('Industry'), max_length=80)
     size = models.CharField(_('Organization Size'), max_length=10)
     country = models.CharField(_('Country'), max_length=50)
-    is_active = models.BooleanField(default=True)
-    is_verified = models.BooleanField(default=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
+    isActive = models.BooleanField(default=True)
+    isVerified = models.BooleanField(default=False)
+    dateCreated = models.DateTimeField(auto_now_add=True)
+    lastUpdated = models.DateTimeField(auto_now=True)
+
+    REQUIRED_FIELDS = ['orgID','name']
+
+    
 
     def __str__(self):
-        return f"{self.orgID} - {self.name} - Active: {self.is_active} - Date Created: {self.date_created}"
+        return f"{self.orgID} - {self.name} - Active: {self.isActive} - Date Created: {self.dateCreated}"
 
 # Create user model
-class User(AbstractBaseUser, PermissionsMixin):
-    orgID = models.OneToOneField(Organization, on_delete=models.CASCADE, null=True, blank=True)
+class User(AbstractUser):
+    userID = models.CharField(_('User ID'), max_length=15, primary_key=True)
+    orgID = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(_('Full Name'), max_length=100)
     email = models.EmailField(_('Email Address'), unique=True)
     phoneNumber = models.CharField(_('Phone Number'), max_length=15)
     role = models.CharField(_('Role'), max_length=80)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
-    is_verified = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(auto_now=True)
+    isAdmin = models.BooleanField(_('Is Admin'), default=False)
+    isActive = models.BooleanField(_('Is Active'), default=True)
+    dateJoined = models.DateTimeField(auto_now_add=True)
+    lastLogin = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
 
-    objects: UserManager = UserManager()
-
     def __str__(self):
-        return f"{self.name} - ({self.orgID}) - {self.email} - {self.phoneNumber} - superuser: {self.is_superuser} - active: {self.is_active} - joined: {self.date_joined}"
-    
-    def tokens(self):
-        pass
+        return f"{self.name} - ({self.orgID}) - {self.email} - {self.phoneNumber} - superuser: {self.isAdmin} - active: {self.isActive} - joined: {self.dateJoined}"
 
 # create the insights table
 class Insight(models.Model):
@@ -61,11 +58,11 @@ class Insight(models.Model):
         ('networking', "Webinar/Networking event")
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    userID = models.ForeignKey(User, on_delete=models.CASCADE)
     interests = models.CharField(_('Interest'), max_length=1, choices=INTEREST)
     referrer = models.CharField(_('Referrer'), max_length=15, choices=REFERER)
-    date_created = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
+    dateCreated = models.DateTimeField(auto_now_add=True)
+    lastUpdated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user} - {self.interests} - {self.referrer} - {self.date_created}"
+        return f"{self.userID} - {self.interests} - {self.referrer} - {self.dateCreated}"
