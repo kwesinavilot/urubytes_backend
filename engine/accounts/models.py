@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class Organization(models.Model):
     orgID = models.CharField(_('Organization ID'), max_length=15, primary_key=True)
     name = models.CharField(_('Organization Name'), max_length=100, unique=True)
-    email = models.EmailField(_('Email Address'), unique=True, null=True)
+    email = models.EmailField(_('Email Address'), null=True, blank=True)
     phoneNumber = models.CharField(_('Phone Number'), max_length=15, null=True, blank=True)
     industry = models.CharField(_('Industry'), max_length=80)
     size = models.CharField(_('Organization Size'), max_length=10)
@@ -18,13 +18,12 @@ class Organization(models.Model):
 
     REQUIRED_FIELDS = ['orgID','name']
 
-    
-
     def __str__(self):
         return f"{self.orgID} - {self.name} - Active: {self.isActive} - Date Created: {self.dateCreated}"
 
 # Create user model
 class User(AbstractUser):
+    username = None
     userID = models.CharField(_('User ID'), max_length=15, primary_key=True)
     orgID = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(_('Full Name'), max_length=100)
