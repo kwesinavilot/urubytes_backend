@@ -8,7 +8,7 @@
 ./engine/db.sqlite3
 /engine/db.sqlite3
 
-./Reports
-./Documents
-/Documents
-/Reports
+./Reports/*
+./Documents/*
+/Documents/*
+/Reports/*
