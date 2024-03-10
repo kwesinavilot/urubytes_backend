@@ -25,7 +25,7 @@ class Organization(models.Model):
 class User(AbstractUser):
     username = None
     userID = models.CharField(_('User ID'), max_length=15, primary_key=True)
-    orgID = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    orgID = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='organization')
     name = models.CharField(_('Full Name'), max_length=100)
     email = models.EmailField(_('Email Address'), unique=True)
     phoneNumber = models.CharField(_('Phone Number'), max_length=15)
@@ -57,7 +57,7 @@ class Insight(models.Model):
         ('networking', "Webinar/Networking event")
     ]
 
-    userID = models.ForeignKey(User, on_delete=models.CASCADE)
+    userID = models.ForeignKey(User, on_delete=models.CASCADE, related_name='insights')
     interests = models.CharField(_('Interest'), max_length=1, choices=INTEREST)
     referrer = models.CharField(_('Referrer'), max_length=15, choices=REFERER)
     dateCreated = models.DateTimeField(auto_now_add=True)

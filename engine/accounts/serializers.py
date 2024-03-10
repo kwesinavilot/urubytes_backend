@@ -1,21 +1,18 @@
 from rest_framework import serializers
 from .models import User, Organization, Insight
 
-
-#     def validate(self, attrs):
-#         if User.objects.filter(email=attrs['email']).exists():
-#             raise serializers.ValidationError({'email': 'Email already in use'})
-        
-#         return attrs
-
-
 # create a user serializer
 class UserSerializer(serializers.ModelSerializer):
+    userID = serializers.CharField(read_only=True)
+    orgID = serializers.PrimaryKeyRelatedField(queryset=Organization.objects.all())
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    role = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True, min_length=8)
 
     class Meta:
         model = User
-        fields = ['userID', 'orgID','name', 'email', 'role', 'password']
+        fields = ['userID', 'orgID','name', 'email', 'role']
 
 # create serializer for organizations
 class OrganizationSerializer(serializers.ModelSerializer):
