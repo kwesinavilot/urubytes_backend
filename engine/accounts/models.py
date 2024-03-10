@@ -37,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
 
-    objects = UserManager()
+    objects: UserManager = UserManager()
 
     def __str__(self):
         return f"{self.name} - ({self.orgID}) - {self.email} - {self.phoneNumber} - superuser: {self.is_superuser} - active: {self.is_active} - joined: {self.date_joined}"
@@ -69,3 +69,13 @@ class Insight(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.interests} - {self.referrer} - {self.date_created}"
+
+
+class OneTimePassword(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.otp} - {self.date_created}"
