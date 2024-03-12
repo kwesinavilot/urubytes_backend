@@ -1,5 +1,3 @@
-{
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.typeCheckingMode": "basic",
-    "python.REPL.enableREPLSmartSend": false
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d5793ab89e3e945ded3a92e80b22f268b5c649de31655c8ce060b5950ddd85bc
+size 152

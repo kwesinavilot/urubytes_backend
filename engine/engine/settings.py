@@ -13,12 +13,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# load the .env file
+env_path = load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(env_path)
 
 from datetime import timedelta
 
@@ -27,10 +29,10 @@ from datetime import timedelta
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = DEBUG = os.environ.get('DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = [] #os.getenv('ALLOWED_HOSTS').split(' ')
 
@@ -41,6 +43,7 @@ ALLOWED_HOSTS = [] #os.getenv('ALLOWED_HOSTS').split(' ')
 
 INSTALLED_APPS = [
     'api',
+    'modelsx',
     'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -88,6 +91,14 @@ WSGI_APPLICATION = 'engine.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+# Replace the SQLite DATABASES configuration with PostgreSQL:
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgres://urubytes_user:DwioRh3MMOjRGOZSrAhU4CS9cKWO6cbs@dpg-cnnpn58cmk4c73bjqt7g-a/urubytes',
+#         conn_max_age=600
+#     )
+# }
 
 DATABASES = {
     'default': {
