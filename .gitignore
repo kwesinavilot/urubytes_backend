@@ -3,12 +3,13 @@
 ./virenv/*
 
 .env
-/.env
+./.env
 
-./engine/db.sqlite3
-/engine/db.sqlite3
+./db.sqlite3
+db.sqlite3
 
-./Reports/*
-./Documents/*
-/Documents/*
-/Reports/*
+./testsite/Documents/*
+/testsite/Documents/*
+
+.vscode
+./.vscode
