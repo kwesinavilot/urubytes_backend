@@ -12,7 +12,6 @@ from django.conf import settings
 # OpenAI Key
 os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_KEY")
 
-
 # A function check if a previous index in storage already exists
 # and if not, rebuilds the storage context
 # def prepareIndex():
