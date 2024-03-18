@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os, sys
 from dotenv import load_dotenv
 import dj_database_url
 
@@ -34,14 +34,14 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG = os.environ.get('DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
-print(ALLOWED_HOSTS)
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', "127.0.0.1,localhost").split(",")
+
+# Check if DEVELOPMENT_MODE is set to True
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 # CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(' ')
 
- 
 # Application definition
-
 INSTALLED_APPS = [
     'auxi',
     'modelsx',
@@ -93,20 +93,19 @@ WSGI_APPLICATION = 'engine.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# Replace the SQLite DATABASES configuration with PostgreSQL:
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default='postgres://urubytes_user:DwioRh3MMOjRGOZSrAhU4CS9cKWO6cbs@dpg-cnnpn58cmk4c73bjqt7g-a/urubytes',
-#         conn_max_age=600
-#     )
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -175,6 +174,8 @@ REST_FRAMEWORK = {
 #         'rest_framework_json_api.renderers.JSONRenderer',
 #     ),
 #     'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
 }
 
 SIMPLE_JWT = {
