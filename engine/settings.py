@@ -37,25 +37,30 @@ DEBUG = DEBUG = os.environ.get('DEBUG', '') != 'False'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', "127.0.0.1,localhost").split(",")
 
 # Check if DEVELOPMENT_MODE is set to True
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.environ.get("DEVELOPMENT_MODE", "False") == "True"
 
-# CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(' ')
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', "127.0.0.1,localhost").split(',')
 
 # Application definition
 INSTALLED_APPS = [
-    'auxi',
-    'modelsx',
-    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 3rd party
+    'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
+
+    # internal apps
+    'auxi',
+    'modelsx',
+    'accounts',
 ]
 
 MIDDLEWARE = [
