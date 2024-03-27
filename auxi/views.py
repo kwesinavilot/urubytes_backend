@@ -22,6 +22,7 @@ class Waitlists(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
 
     # add someone to waitlist
     def post(self, request, *args, **kwargs):
+        print(request.data)
         return self.create(request, *args, **kwargs)
 
 # Retrieve, update or delete a waitlister
